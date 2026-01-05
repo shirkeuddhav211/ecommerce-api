@@ -1,8 +1,13 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
+import { AuthModule } from './auth/auth.module';
+import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -17,10 +22,17 @@ import { ProductModule } from './product/product.module';
       synchronize: true, // Set false for production migration
     }),
     ProductModule,
-    // ProductModule,
+    AuthModule,
+    CartModule,
+    OrderModule,
+    PaymentModule,
     // ...other modules
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+ }

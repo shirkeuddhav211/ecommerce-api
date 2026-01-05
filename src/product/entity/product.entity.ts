@@ -8,15 +8,15 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ nullable: true, type: 'text' })
-  description: string;
+  @Column({ type: 'text', nullable: true })
+  description?: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
   @Column({ nullable: true })
-  category: string;
+  category?: string;
 
   @Column({ nullable: true })
-  image: string;
+  image?: string; // image URL or filename
 }
